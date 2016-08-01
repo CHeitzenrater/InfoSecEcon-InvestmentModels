@@ -6,12 +6,13 @@
 
 source("../models/iwl-SSE.R", local=TRUE)
 
-
-
 ###
-# Produces the graph of the ROI for established numbers of reviews and tests
+# Examines the space of potential values (senitivity analysis) and produces the graph of the ROI for 
+#  established numbers of reviews and tests.
+# sigmaMax: Starting uncertainty value (default is 16)
+# x0:		Starting attack gradient (default is 15)
 #
-examineSWPhasesOnly <- function( sigmaMax=16, x0=15 ){
+Figure6 <- function( sigmaMax=16, x0=15 ){
 	u <- vector(mode="numeric", length=0)	# uncertainty values
 	d <- vector(mode="numeric", length=0)	# attack gradient values
 			
@@ -105,10 +106,22 @@ examineSWPhasesOnly <- function( sigmaMax=16, x0=15 ){
 	legend("bottom", c("2 reviews & 2 tests, both 35% effective"), pch=c(8), horiz=TRUE, bty="n", cex=0.85)			
 }
 
+################################################################ 
+
 ###
-# Produces the graph of ROSI values (Section 5)
+# Evaluates the ROSI for a series of SSE process values, and produces the graph of ROSI values in Section 5
+# Evaluated:
+#		revIter=0, 	testIter=0, 	 revEff=0,   testEff=0,   revCost=0, testCost=0, sigmaMax=0 (baseline)
+#		revIter=0, 	testIter=0,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 
+#		revIter=0, 	testIter=0,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=1, 	testIter=1,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=5, 	testIter=1,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=1, 	testIter=5,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=8, 	testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+# No parameters		
 #
-evaluate <- function(){
+Figure7 <- function(){
 	# Vectors to hold the values for various combinations of review and test
 	vals0 <- vector(mode="numeric", length=0)
 	vals1 <- vector(mode="numeric", length=0)
@@ -154,7 +167,7 @@ evaluate <- function(){
 	lines(0:25,vals5$rev,type="b",col="black",pch=16)
 	lines(0:25,vals10$rev,type="b",col="black",pch=17)
 	lines(0:25,vals25$rev,type="b",col="black",pch=18)
-	lines(0:25,vals26$rev,type="b",col="black",pch=8)
+	lines(0:25,vals26$rev,type="b",col="black",pch=8)	
 	
 	message("0r and 0t sigma 0 ", vals0$rev[vals0$k+1], " ", vals0$k)
 	message("0r and 0t sigma 16 ", vals0_2$rev[vals0_2$k+1], " ", vals0_2$k)	
@@ -169,121 +182,30 @@ evaluate <- function(){
 	plot.new()
 	legend("top", c("1 review, 1 test", "5 reviews, 1 test", "1 review, 5 tests", "8 reviews, 24 tests", "25 reviews, 25 tests"), 
 		pch=c(15,16,17,18,8), horiz=TRUE, bty="n", cex=0.75)
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
-				
+	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)					
 }
-evaluate <- function(){
-	# Vectors to hold the values for various combinations of review and test
-	vals0 <- vector(mode="numeric", length=0)
-	vals1 <- vector(mode="numeric", length=0)
-	vals5 <- vector(mode="numeric", length=0)
-	vals10 <- vector(mode="numeric", length=0)	
-	vals25 <- vector(mode="numeric", length=0)
-	vals26 <- vector(mode="numeric", length=0)	
-	
-	# Baseline value --- no uncertainty, no SSE
-	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
 
-	# Various combinations of review and test
-	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
-	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals1 <- swProcess( revIter=1, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals5 <- swProcess( revIter=5, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals10 <- swProcess( revIter=1, testIter=5, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals25 <- swProcess( revIter=8, testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals26 <- swProcess( revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
 
-	# Establishes the plot	
-	layout(rbind(1,2), heights=c(10,1))
-	plot(0:25,valsNo$rev,las=1, 
-		xlab="Number of deployed proactive defences (k)",
-		ylab="Return on Security Investment (ROSI)",
-		ylim=range(-15:50),xlim=c(0,25))	
-	rect(-80,-80,30,0,col=gray(.85),lty=3)
-	par(mai=c(0.92,0.96,0.82,0.42))
+################################################################ 
 
-	# Highlights the optimal points for each parameter set
-	points(vals0$k,vals0$rev[vals0$k+1],pch=16,cex=2,col="yellow")
-	points(vals0_2$k,vals0_2$rev[vals0_2$k+1],pch=15,cex=2,col="yellow")
-	points(vals1$k,vals1$rev[vals1$k+1],pch=15,cex=2,col="yellow")	
-	points(vals5$k,vals5$rev[vals5$k+1],pch=16,cex=2,col="yellow")
-	points(vals10$k,vals10$rev[vals10$k+1],pch=17,cex=2,col="yellow")
-	points(vals26$k,vals26$rev[vals26$k+1],pch=16,cex=2,col="yellow")
-	points(vals25$k,vals25$rev[vals25$k+1],pch=18,cex=2,col="yellow")
-
-	# Draw the lines for various parameters
-	lines(0:25,vals0$rev,type="b",col="black",pch=12)
-	lines(0:25,vals0_2$rev,type="b",col="black",pch=10)
-	lines(0:25,vals1$rev,type="b",col="black",pch=15)
-	lines(0:25,vals5$rev,type="b",col="black",pch=16)
-	lines(0:25,vals10$rev,type="b",col="black",pch=17)
-	lines(0:25,vals25$rev,type="b",col="black",pch=18)
-	lines(0:25,vals26$rev,type="b",col="black",pch=8)
-	
-	message("0r and 0t sigma 0 ", vals0$rev[vals0$k+1], " ", vals0$k)
-	message("0r and 0t sigma 16 ", vals0_2$rev[vals0_2$k+1], " ", vals0_2$k)	
-	message("1r and 1t ", vals1$rev[vals1$k+1], " ", vals1$k)	
-	message("5r and 1t ", vals5$rev[vals5$k+1], " ", vals5$k)
-	message("1r and 5t ", vals10$rev[vals10$k+1], " ", vals10$k)
-	message("8r and 24t ", vals25$rev[vals25$k+1], " ", vals25$k)
-	message("25r and 25t ", vals26$rev[vals26$k+1], " ", vals26$k)	
-		
-	# Draws the legend		
-	par(mar=c(0, 0, 0, 0))
-	plot.new()
-	legend("top", c("1 review, 1 test", "5 reviews, 1 test", "1 review, 5 tests", "8 reviews, 24 tests", "25 reviews, 25 tests"), 
-		pch=c(15,16,17,18,8), horiz=TRUE, bty="n", cex=0.75)
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
-				
-}
-evaluateOrig <- function(){
+###
+# Evaluates the ROSSP for a series of SSE process values, and produces the graph of ROSSP values in Section 5
+# Evaluated:
+#		revIter=0, 	testIter=0,  revEff=0,   testEff=0,   revCost=0, testCost=0, sigmaMax=0  (baseline)
+#		revIter=0,  testIter=0,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 (baseline)
+#		revIter=0, 	testIter=0,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 
+#		revIter=0, 	testIter=0,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=1, 	testIter=1,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=5, 	testIter=1,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=1, 	testIter=5,  revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=8, 	testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+#		revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 
+# No parameters		
+#
+Figure8 <- function(){
 	# Vectors to hold the values for various combinations of review and test
 	vals0 <- vector(mode="numeric", length=0)
 	vals0_2 <- vector(mode="numeric", length=0)
-
-	
-	# Baseline value --- no uncertainty, no SSE
-	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
-
-	# Various combinations of review and test
-	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
-	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-
-
-	# Establishes the plot	
-	layout(rbind(1,2), heights=c(10,1))
-	plot(0:25,valsNo$rev,las=1, 
-		xlab="Number of deployed proactive defences (k)",
-		ylab="Return on Security Investment (ROSI)",
-		ylim=range(-15:50),xlim=c(0,25))	
-	rect(-80,-80,30,0,col=gray(.85),lty=3)
-	par(mai=c(0.92,0.96,0.82,0.42))
-
-	# Highlights the optimal points for each parameter set
-	points(vals0$k,vals0$rev[vals0$k+1],pch=16,cex=2,col="yellow")
-	points(vals0_2$k,vals0_2$rev[vals0_2$k+1],pch=15,cex=2,col="yellow")
-
-	# Draw the lines for various parameters
-	lines(0:25,vals0$rev,type="b",col="black",pch=12)
-	lines(0:25,vals0_2$rev,type="b",col="black",pch=10)
-	
-	message("0r and 0t sigma 0 ", vals0$rev[vals0$k+1], " ", vals0$k)
-	message("0r and 0t sigma 16 ", vals0_2$rev[vals0_2$k+1], " ", vals0_2$k)	
-		
-	# Draws the legend		
-	par(mar=c(0, 0, 0, 0))
-	plot.new()
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
-				
-}
-
-
-###
-# Produces the graph of ROSSP values (Section 5)
-#
-evaluateROSSP <- function(){
-	# Vectors to hold the values for various combinations of review and test
-	vals0 <- vector(mode="numeric", length=0)
 	vals1 <- vector(mode="numeric", length=0)
 	vals5 <- vector(mode="numeric", length=0)
 	vals10 <- vector(mode="numeric", length=0)	
@@ -343,3 +265,50 @@ evaluateROSSP <- function(){
 	message("8r and 24t ", f, " ", vals25$k)
 	message("25r and 25t ", g, " ", vals26$k)	
 }
+
+################################################################ 
+################################################################ 
+
+###
+# Evaluates the baseline values (sanity check --- not used in paper)
+#
+evaluateOrig <- function(){
+	# Vectors to hold the values for various combinations of review and test
+	vals0 <- vector(mode="numeric", length=0)
+	vals0_2 <- vector(mode="numeric", length=0)
+
+	# Baseline value --- no uncertainty, no SSE
+	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
+
+	# Various combinations of review and test
+	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
+	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+
+
+	# Establishes the plot	
+	layout(rbind(1,2), heights=c(10,1))
+	plot(0:25,valsNo$rev,las=1, 
+		xlab="Number of deployed proactive defences (k)",
+		ylab="Return on Security Investment (ROSI)",
+		ylim=range(-15:50),xlim=c(0,25))	
+	rect(-80,-80,30,0,col=gray(.85),lty=3)
+	par(mai=c(0.92,0.96,0.82,0.42))
+
+	# Highlights the optimal points for each parameter set
+	points(vals0$k,vals0$rev[vals0$k+1],pch=16,cex=2,col="yellow")
+	points(vals0_2$k,vals0_2$rev[vals0_2$k+1],pch=15,cex=2,col="yellow")
+
+	# Draw the lines for various parameters
+	lines(0:25,vals0$rev,type="b",col="black",pch=12)
+	lines(0:25,vals0_2$rev,type="b",col="black",pch=10)
+	
+	message("0r and 0t sigma 0 ", vals0$rev[vals0$k+1], " ", vals0$k)
+	message("0r and 0t sigma 16 ", vals0_2$rev[vals0_2$k+1], " ", vals0_2$k)	
+		
+	# Draws the legend		
+	par(mar=c(0, 0, 0, 0))
+	plot.new()
+	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
+				
+}
+
