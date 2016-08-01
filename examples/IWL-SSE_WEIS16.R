@@ -28,40 +28,40 @@ Figure6 <- function( sigmaMax=16, x0=15 ){
 	ylim=range(0:sigmaMax),xlim=range(0.75:dxMax))
 
 	# Calculate various points within the trade-space
-	vals <- swProcessOnly( revIter=0, testIter=0, revEff=0, testEff=0, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=0, testIter=0, revEff=0, testEff=0, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 			
 	# point with 
-	vals <- swProcessOnly( revIter=0, testIter=0, revEff=0.001, testEff=0.001, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=0, testIter=0, revEff=0.001, testEff=0.001, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 					
-	vals <- swProcessOnly( revIter=0, testIter=0, revEff=0.99, testEff=0.99, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=0, testIter=0, revEff=0.99, testEff=0.99, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 				
-	vals <- swProcessOnly( revIter=1, testIter=1, revEff=0.0001, testEff=0.0001, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=1, testIter=1, revEff=0.0001, testEff=0.0001, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 			
-	vals <- swProcessOnly( revIter=2, testIter=2, revEff=0.35, testEff=0.35, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=2, testIter=2, revEff=0.35, testEff=0.35, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 					
-	vals <- swProcessOnly( revIter=1, testIter=1, revEff=0.99, testEff=0.99, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=1, testIter=1, revEff=0.99, testEff=0.99, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 		
-	vals <- swProcessOnly( revIter=100, testIter=100, revEff=0, testEff=0, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=100, testIter=100, revEff=0, testEff=0, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 			
-	vals <- swProcessOnly( revIter=100, testIter=100, revEff=0.0001, testEff=0.0001, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=100, testIter=100, revEff=0.0001, testEff=0.0001, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 					
-	vals <- swProcessOnly( revIter=10, testIter=10, revEff=0.9999, testEff=0.9999, revCost=1, testCost=1, sigmaMax=sigmaMax )
+	vals <- CalculateSWProcessCosts( revIter=10, testIter=10, revEff=0.9999, testEff=0.9999, revCost=1, testCost=1, sigmaMax=sigmaMax )
 	u <- c(u, as.numeric(vals$sigma))
 	d <- c(d, as.numeric(vals$dx))
 	
@@ -131,16 +131,16 @@ Figure7 <- function(){
 	vals26 <- vector(mode="numeric", length=0)	
 	
 	# Baseline value --- no uncertainty, no SSE
-	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
+	valsNo <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
 
 	# Various combinations of review and test
-	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
-	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals1 <- swProcess( revIter=1, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals5 <- swProcess( revIter=5, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals10 <- swProcess( revIter=1, testIter=5, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals25 <- swProcess( revIter=8, testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals26 <- swProcess( revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals0 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
+	vals0_2 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals1 <- CalculateOverallCosts( revIter=1, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals5 <- CalculateOverallCosts( revIter=5, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals10 <- CalculateOverallCosts( revIter=1, testIter=5, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals25 <- CalculateOverallCosts( revIter=8, testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals26 <- CalculateOverallCosts( revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
 
 	# Establishes the plot	
 	layout(rbind(1,2), heights=c(10,1))
@@ -213,16 +213,16 @@ Figure8 <- function(){
 	vals26 <- vector(mode="numeric", length=0)	
 	
 	# Baseline value --- no uncertainty, no SSE
-	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
+	valsNo <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
 	
 	# Various combinations of review and test
-	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
-	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals1 <- swProcess( revIter=1, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals5 <- swProcess( revIter=5, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals10 <- swProcess( revIter=1, testIter=5, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals25 <- swProcess( revIter=8, testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
-	vals26 <- swProcess( revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals0 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
+	vals0_2 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals1 <- CalculateOverallCosts( revIter=1, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals5 <- CalculateOverallCosts( revIter=5, testIter=1, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals10 <- CalculateOverallCosts( revIter=1, testIter=5, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals25 <- CalculateOverallCosts( revIter=8, testIter=24, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals26 <- CalculateOverallCosts( revIter=25, testIter=25, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
 	
 	# Establishes the plot
 	layout(rbind(1,2), heights=c(6,1))
@@ -278,11 +278,11 @@ evaluateOrig <- function(){
 	vals0_2 <- vector(mode="numeric", length=0)
 
 	# Baseline value --- no uncertainty, no SSE
-	valsNo <- swProcess( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
+	valsNo <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0, testEff=0, revCost=0, testCost=0, sigmaMax=0 )
 
 	# Various combinations of review and test
-	vals0 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
-	vals0_2 <- swProcess( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
+	vals0 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=0 )
+	vals0_2 <- CalculateOverallCosts( revIter=0, testIter=0, revEff=0.6, testEff=0.3, revCost=3, testCost=1, sigmaMax=16 )
 
 
 	# Establishes the plot	
