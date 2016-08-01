@@ -1,7 +1,6 @@
 # Sep 28, 2008 - Rainer Böhme
 
-### Commented out for general usability --- CDH 2017.08.01
-#setwd("/Users/rb21/Documents/Projekte/WEIS2009/IWL/R")
+setwd("/Users/rb21/Documents/Projekte/WEIS2009/IWL/R")
 #setwd("/home/tmoore/pub/fc2009/R")
 
 plot.attack.cost <- function(sigma,n=8)
