@@ -4,7 +4,7 @@
 #
 ################################################################ 
 
-source("../models/iwl-SSE.R", local=TRUE)
+source("./models/iwl-SSE.R", local=TRUE)
 
 ###
 # Examines the space of potential values (senitivity analysis) and produces the graph of the ROI for 

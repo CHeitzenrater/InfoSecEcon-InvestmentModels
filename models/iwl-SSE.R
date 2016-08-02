@@ -1,4 +1,4 @@
-source("iwl-Chad.R",local=TRUE)
+source("./models/iwl-Alt.R",local=TRUE)
 
 ################################################################
 #

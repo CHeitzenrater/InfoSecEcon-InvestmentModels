@@ -3,6 +3,7 @@
 # Data used for the analysis in the WEIS 2015 and Journal of Cybersecurity
 #
 #############################################################################
+source("./models/InfoEconFunctions.R", local=TRUE)
 
 #====================================================
 #
@@ -287,18 +288,6 @@ Ale_LBm_H_14 = ALE(p_malicious_LB_14,tcwi_H_LB_14)
 Ale_LBm_L_14 = ALE(p_malicious_LB_14,tcwi_L_LB_14)
 Ale_LBm_H_13 = ALE(p_malicious_LB_13,tcwi_H_LB_13)
 Ale_LBm_L_13 = ALE(p_malicious_LB_13,tcwi_L_LB_13)
-
-# ALE by attack type --- virus, hackers, both
-# Low (L) and High (H) loss estimates 
-# For Small Business (SB)
-ale_L_virus <- ALE(p_0_worst_virus, twci_L_SB)
-ale_H_virus <- ALE(p_0_worst_virus, twci_H_SB)
-ale_L_hackers <- ALE(p_0_worst_hacker, twci_L_SB)
-ale_H_hackers <- ALE(p_0_worst_hacker, twci_H_SB)
-ale_L_both <- ALE(p_0_worst_both, twci_L_SB)
-ale_H_both <- ALE(p_0_worst_both, twci_H_SB)
-ale_L_both_4 <- ALE(p_0_worst_both, 4*twci_L_SB)
-ale_H_both_4 <- ALE(p_0_worst_both, 4*twci_H_SB)
 
 
 

@@ -6,7 +6,7 @@
 #
 ########################
 
-### Requires source("../models/GL.R")
+source("./models/GL.R")
 
 ###
 # Security breach reduction; returns the difference between the value of 
