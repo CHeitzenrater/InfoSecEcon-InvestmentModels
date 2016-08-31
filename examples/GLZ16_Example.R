@@ -15,7 +15,7 @@ source("./models/GL.R")
 # form: Form for s to use; see definition of s() in GL.R for forms
 #
 s_Reduction <- function( z=1, v=1, form ){
-	return( s(z-1, v, form) - s(z, v, form) )
+	return( S1_Var(z-1, v, form) - S1_Var(z, v, form) )
 }
 
 
@@ -38,9 +38,9 @@ vConst <- 1
 
 investmentRange <- c(0,1,2,3,4,5,6)
 
-lowBPF <-  round( s(investmentRange, vConst, "GLZ16-LOW"),  3 )
-medBPF <-  round( s(investmentRange, vConst, "GLZ16-MED"),  3 )
-highBPF <- round( s(investmentRange, vConst, "GLZ16-HIGH"), 3 ) 
+lowBPF <-  round( S1_Var(investmentRange, vConst, "GLZ16-LOW"),  3 )
+medBPF <-  round( S1_Var(investmentRange, vConst, "GLZ16-MED"),  3 )
+highBPF <- round( S1_Var(investmentRange, vConst, "GLZ16-HIGH"), 3 ) 
 
 lowBPFReduction <-  round( s_Reduction(investmentRange, vConst, "GLZ16-LOW"), 3 )
 medBPFReduction <-  round( s_Reduction(investmentRange, vConst, "GLZ16-MED"), 3 )

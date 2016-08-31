@@ -182,7 +182,7 @@ Figure7 <- function(){
 	plot.new()
 	legend("top", c("1 review, 1 test", "5 reviews, 1 test", "1 review, 5 tests", "8 reviews, 24 tests", "25 reviews, 25 tests"), 
 		pch=c(15,16,17,18,8), horiz=TRUE, bty="n", cex=0.75)
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)					
+	legend("center", c( expression(paste("0 reviews, 0 tests, ", sigma, " = 0"))	, expression(paste("0 reviews, 0 tests, ", sigma, " = 16")) ), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)					
 }
 
 
@@ -247,7 +247,9 @@ Figure8 <- function(){
 	plot.new()
 	legend("top", c("1 review, 1 test", "5 reviews, 1 test", "1 review, 5 tests", "8 reviews, 24 tests", "25 reviews, 25 tests"), 
 		pch=c(15,16,17,18,8), horiz=TRUE, bty="n", cex=0.75)
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
+	legend("center", c( expression(paste("0 reviews, 0 tests, ", sigma, " = 0"))	, expression(paste("0 reviews, 0 tests, ", sigma, " = 16"))	), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)
+	
+	
 	
 	a <- ROSSP(vals0$rev[vals0$k+1],vals0$rev[vals0$k+1])
 	b <- ROSSP(vals0_2$rev[vals0_2$k+1],vals0$rev[vals0$k+1])
@@ -308,7 +310,7 @@ evaluateOrig <- function(){
 	# Draws the legend		
 	par(mar=c(0, 0, 0, 0))
 	plot.new()
-	legend("center", c("0 reviews, 0 tests, sigma = 0", "0 reviews, 0 tests, sigma=16"), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
+	legend("center", c( expression(paste("0 reviews, 0 tests, ", sigma, " = 0"))	, expression(paste("0 reviews, 0 tests, ", sigma, " = 16")) ), pch=c(12,10), horiz=TRUE, bty="n", cex=0.75)	
 				
 }
 
