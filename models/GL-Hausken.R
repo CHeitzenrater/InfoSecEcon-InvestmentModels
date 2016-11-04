@@ -1,15 +1,17 @@
-####################################################################################################
+#########################################################################################
 #
-# Playing with alternative functions....
+# Hausken Security Probability Breach Functions
+# from: Hausken, K. Returns to information security investment: The effect of alternative
+#   information security breach functions on optimal investment and sensitivity to
+#   vulnerability. Information Systems Frontiers (2006), 338–349.
 #
 ########################
 
 source("./models/GL.R")
 
 ##########
-# Security breach functions - Hausken
+# 
 ##########
-
 # TODO --- proper comments for each of these 
 
 S3 <- function( z=1, v=1, phi=1, gamma=1 ){
@@ -43,10 +45,10 @@ S6 <- function( z=1, v=1, lambda=0.1 ){
 }
 
 
-HauskenGraph_S <- function(){
+HauskenGraph_S <- function( v=0.5, l=16 ){
 	investment = seq(0, 10, by=0.5)
-	startingVul = 0.5
-	loss = 16
+	startingVul = v
+	loss = l
 	
 	alpha = 0.5
 	beta = 1.0
@@ -66,7 +68,7 @@ HauskenGraph_S <- function(){
 	outS6 = sapply(investment, S6, startingVul, lambda)	
 
 
-	plot(investment, outS1, type="o", ylim=range(0,0.5), lty=1, pch=15, ylab="S(z,v)", xlab="Investment")
+	plot(investment, outS1, type="o", ylim=range(0,startingVul), lty=1, pch=15, ylab="S(z,v)", xlab="Investment")
 	#abline(0, 0, col = "black")
 
 	lines(investment, outS2, type="o", lty=1, pch=8)
