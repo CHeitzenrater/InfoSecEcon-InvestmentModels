@@ -8,16 +8,18 @@ source("./models/GL.R")
 source("./models/GL-Hausken.R")
 
 
-GL-SSE <- function( starting_v=1, z_1, z_2, loss, S_PRE, S_POST pre_params, post_params ){
+GL_SSE <- function(sVul=1,z1,z2,loss,delta,SPRE,SPOST,prePar,postPar){
 	
-	pre = starting_v - S_PRE(z_1, startingVul, pre_params)
-	post = pre - S_POST(z_2, pre, post_params)
+	pre = sVul - SPRE(z1, sVul, preParams) + delta
+	post = pre - SPOST(z2, pre, postParams)
 	
-	return( post * loss - (z_1 + z_2) );	
+	return( post * loss - (z1 + z2) );	
 	
 }
 
+GL_SSE(1,3,4,5,0.1,S1,S2,list(z=1, v=1, alpha=1, beta=1),list(z=1, v=1, alpha=1))
+
 ## TO DO LIST:
 # Figure out how to pass function names to other functions
-# figureout how to pass lists of parameters 
+# figure out how to pass lists of parameters 
 # how do you mandate that the function is executed over all of a list?
