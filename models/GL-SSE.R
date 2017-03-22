@@ -4,22 +4,37 @@
 #
 ########################
 
-source("./models/GL.R")
-source("./models/GL-Hausken.R")
+source("./GL.R")
+source("./GL-Hausken.R")
 
 
-GL_SSE <- function(sVul=1,z1,z2,loss,delta,SPRE,SPOST,prePar,postPar){
+GL_SSE <- function(sVul=1,z1,z2,t=1,lambda,delta=0,SPRE,SPOST,prePar,postPar){
 	
-	pre = sVul - SPRE(z1, sVul, preParams) + delta
-	post = pre - SPOST(z2, pre, postParams)
+	start = sVul-delta
+	pre = start - do.call( SPRE, list(z1, start, as.numeric(as.character(prePar[1])), as.numeric(as.character(prePar[2]))) ) + delta
+	#if(pre > 1){pre <- 1}
+	#message(pre)
 	
-	return( post * loss - (z1 + z2) );	
+	post = pre - do.call( SPOST, list(z2, pre, as.numeric(as.character(postPar[1]))) )
+	#message(post)
 	
+	return( post * (t*lambda) - (z1 + z2) );	
 }
 
-GL_SSE(1,3,4,5,0.1,S1,S2,list(z=1, v=1, alpha=1, beta=1),list(z=1, v=1, alpha=1))
 
-## TO DO LIST:
-# Figure out how to pass function names to other functions
-# figure out how to pass lists of parameters 
-# how do you mandate that the function is executed over all of a list?
+GL_SSE_S1_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1){
+	start = sVul-delta
+	pre = start - S1(z1, start, alpha1, beta1) + delta
+	#if(pre > 1){pre <- 1}
+	#message(pre)
+	
+	post = pre - S2(z2, pre, alpha2) 
+	#message(post)
+		
+	return( post * (t*lambda) - (z1 + z2) );	
+}
+
+
+#z1seq = seq(0,600000)
+#deltaSeq = seq(0.01, 0.25, by=0.02)
+#GL_SSE(1,1,3.7,10,0.1,S1,S2,list(1,1),list(1))
