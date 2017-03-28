@@ -14,11 +14,11 @@ source("./GL.R")
 ##########
 # TODO --- proper comments for each of these 
 
-S3 <- function( z=1, v=1, phi=1, gamma=1 ){
+S3H <- function( z=1, v=1, phi=1, gamma=1 ){
 	return( v / (1 + ( gamma * (exp(phi*z) - 1) ) ) )
 }
 
-S4 <- function( z=1, v=1, mu=1, k=0.5 ){
+S4H <- function( z=1, v=1, mu=1, k=0.5 ){
 	# and 0 < k < 1
 	if( z > mu^(-1/k) ){
 		return( 0 );
@@ -27,7 +27,7 @@ S4 <- function( z=1, v=1, mu=1, k=0.5 ){
 	}
 }
 
-S5 <- function( z=1, v=1, omega=1, k=2 ){
+S5H <- function( z=1, v=1, omega=1, k=2 ){
 	# k > 1
 	if( z > omega^(-1/k) ){
 		return( 0 );
@@ -36,7 +36,7 @@ S5 <- function( z=1, v=1, omega=1, k=2 ){
 	}
 }
 
-S6 <- function( z=1, v=1, lambda=0.1 ){
+S6H <- function( z=1, v=1, lambda=0.1 ){
 	if( z > (1/lambda) ){
 		return( 0 );
 	} else {
@@ -62,10 +62,10 @@ HauskenGraph_S <- function( v=0.5, l=16 ){
 
 	outS1 = S1(investment, startingVul, alpha, beta)	
 	outS2 = S2(investment, startingVul, alpha)	
-	outS3 = S3(investment, startingVul, phi, gamma)	
-	outS4 = sapply(investment, S4, startingVul, mu, k_s4)	
-	outS5 = sapply(investment, S5, startingVul, omega, k_s5)	
-	outS6 = sapply(investment, S6, startingVul, lambda)	
+	outS3 = S3H(investment, startingVul, phi, gamma)	
+	outS4 = sapply(investment, S4H, startingVul, mu, k_s4)	
+	outS5 = sapply(investment, S5H, startingVul, omega, k_s5)	
+	outS6 = sapply(investment, S6H, startingVul, lambda)	
 
 
 	plot(investment, outS1, type="o", ylim=range(0,startingVul), lty=1, pch=15, ylab="S(z,v)", xlab="Investment")
@@ -98,10 +98,10 @@ HauskenGraph_ENBIS <- function(){
 
 	outS1 = (startingVul - S1(investment, startingVul, alpha, beta)) * loss - investment	
 	outS2 = (startingVul - S2(investment, startingVul, alpha)) * loss - investment	
-	outS3 = (startingVul - S3(investment, startingVul, phi, gamma)) * loss - investment
-	outS4 = (startingVul - sapply(investment, S4, startingVul, mu, k_s4)) * loss - investment
-	outS5 = (startingVul - sapply(investment, S5, startingVul, omega, k_s5)) * loss - investment
-	outS6 = (startingVul - sapply(investment, S6, startingVul, lambda)) * loss - investment
+	outS3 = (startingVul - S3H(investment, startingVul, phi, gamma)) * loss - investment
+	outS4 = (startingVul - sapply(investment, S4H, startingVul, mu, k_s4)) * loss - investment
+	outS5 = (startingVul - sapply(investment, S5H, startingVul, omega, k_s5)) * loss - investment
+	outS6 = (startingVul - sapply(investment, S6H, startingVul, lambda)) * loss - investment
 
 
 	plot(investment, outS1, type="o", ylim=range(-3.5,2.5), lty=1, pch=15, ylab="S(z,v)", xlab="Investment")
