@@ -130,7 +130,7 @@ beta = 1.0
 alpha2 = 1.0
 loss = 10
 
-outS3 = S3(investment, startingVul, 1, 1)
+outS3 = S3H(investment, startingVul, 1, 1)
 combined0 = ((outS3) - S1(0, outS3, alpha, beta))*loss-(investment)
 combined1 = ((outS3) - S1(1, outS3, alpha, beta))*loss-(investment+1)
 combined2 = ((outS3) - S1(3.7, outS3, alpha, beta))*loss-(investment+3.7)
@@ -147,7 +147,7 @@ lines(investment, combined0, type="o", lty=1, pch=18)
 
 
 ### S3 followed by S2
-outS3 = S3(investment, startingVul, 1, 1)
+outS3 = S3H(investment, startingVul, 1, 1)
 combined0 = ((outS3) - S1(0, outS3, alpha, beta))*loss-(investment)
 combined1 = ((outS3) - S2(1, outS3, alpha))*loss-(investment+1)
 combined2 = ((outS3) - S2(3.7, outS3, alpha))*loss-(investment+3.7)
@@ -170,7 +170,7 @@ S4_list <- function( z=1, v=1, mu=1, k=0.5 ){
 	ans <- vector(mode="numeric", length=0);
 	if( length(z) > 1 ){
 		for(i in 1:length(z) ){
-			ans = c(ans, S4(z[i], v, mu, k))
+			ans = c(ans, S4H(z[i], v, mu, k))
 		}
 	} else {
 		ans = S4(z, v, mu, k)
@@ -213,7 +213,7 @@ S5_list <- function( z=1, v=1, omega=1, k=2  ){
 	ans <- vector(mode="numeric", length=0)
 	if( length(z) > 1 ){
 		for(i in 1:length(z) ){
-			ans = c(ans, S5(z[i], v, omega, k))
+			ans = c(ans, S5H(z[i], v, omega, k))
 		}
 	} else {
 		ans = S5(z, v, omega, k)
@@ -256,7 +256,7 @@ S6_list <- function( z=1, v=1, lambda=0.1  ){
 	ans <- vector(mode="numeric", length=0)
 	if( length(z) > 1 ){
 		for(i in 1:length(z) ){
-			ans = c(ans, S6(z[i], v, lambda))
+			ans = c(ans, S6H(z[i], v, lambda))
 		}
 	} else {
 		ans = S6(z, v, lambda)
@@ -303,7 +303,7 @@ legend("top", c("z2=1", "z2=3.7", "z2=5", "z2=10"), lty=c(1,1,1,1), pch=c(15,0,1
 
 
 	
-# outS1 = S3(investment, 0.5, 1, 0.02)			
+# outS1 = S3H(investment, 0.5, 1, 0.02)			
 # outS2 = S1(investment, 0.5, 0.5, 1)
 
 # #plot(invest, outS1, type="o", ylim=range(0,0.5), lty=1, pch=0, ylab="S(z,v)", xlab="Investment")	
