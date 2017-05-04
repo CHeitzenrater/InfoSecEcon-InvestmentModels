@@ -17,15 +17,18 @@ COSECMO_Low = c(1,1,1.2,1.5,2.25,4.13,8.81)
 COSECMO_High_0 = c(0,1,1,1.8,3.0,6.0,13.5,32.25)
 COSECMO_Low_0 = c(0,1,1,1.2,1.5,2.25,4.13,8.81)
 
-######################## Direct costs from report
+######################## Direct costs (from report)
 # Colbert, E. and Boehm, B.  "Cost estimation for secure software \& systems" in ISPA / SECA 2008 Joint International Conference, Huis ter Duin, Noordwijk, The Netherlands, 12-14 May 2008
-#
+
+# Data as presented directly
 COSECMO_5KLOC = c(1,1,1.2,1.5,2.25,4.13,8.81)
 COSECMO_20KLOC = c(1,1,1.4,2.0,3.5,7.25,16.63)
 COSECMO_100KLOC = c(1,1,1.6,2.5,4.75,10.38,24.44)
 COSECMO_1MLOC = c(1,1,1.8,3.0,6.0,13.5,32.25)
-# the "_0" version is intended for when the analysis needs to start at 0
+
+# "_0" version is intended for when the analysis needs to start at 0
 COSECMO_5KLOC_0 = c(0,1,1,1.2,1.5,2.25,4.13,8.81)
 COSECMO_20KLOC_0 = c(0,1,1,1.4,2.0,3.5,7.25,16.63)
 COSECMO_100KLOC_0 = c(0,1,1,1.6,2.5,4.75,10.38,24.44)
 COSECMO_1MLOC_0 = c(0,1,1,1.8,3.0,6.0,13.5,32.25)
+
