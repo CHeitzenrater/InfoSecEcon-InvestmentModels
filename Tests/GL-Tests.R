@@ -9,29 +9,65 @@ source("./models/GL-Hausken.R")
 
 
 S1S2 <- function(){
-	investment = seq(0, 2, by=0.1)
+	investment = seq(0, 5, by=0.2)
 	startingVul = 1.0
-	alpha = 1.0
+	alpha = 0.3837
 	beta = 1.0
-	alpha2 = 1.0
+	alpha2 = 2.5
 	loss = 10
 
 	### S1 followed by S2
 	outS1 = S1(investment, startingVul, alpha, beta)
 	combined0 = ((outS1) - S2(0, outS1, alpha2))*loss-(investment)
+	combined05 = ((outS1) - S2(0.5, outS1, alpha2))*loss-(investment+0.5)
 	combined1 = ((outS1) - S2(1, outS1, alpha2))*loss-(investment+1)
-	combined2 = ((outS1) - S2(3.7, outS1, alpha2))*loss-(investment+3.7)
-	combined3 = ((outS1) - S2(5, outS1, alpha2))*loss-(investment+5)
-	combined5 = ((outS1) - S2(10, outS1, alpha2))*loss-(investment+10)
-	plot(investment, combined1, type="o", ylim=range(-11,2), lty=1, pch=15, ylab="ENBIS", xlab="SSE Investment")
+	combined2 = ((outS1) - S2(2, outS1, alpha2))*loss-(investment+2)
+	combined3 = ((outS1) - S2(3.7, outS1, alpha2))*loss-(investment+3.7)
+	combined5 = ((outS1) - S2(5, outS1, alpha2))*loss-(investment+5)
+	#combined5 = ((outS1) - S2(10, outS1, alpha2))*loss-(investment+10)
+	plot(investment, combined1, type="o", ylim=range(-11,5), lty=1, pch=2, ylab="ENBIS (S1, S2)", xlab="SSE Investment (z1)")
 	abline(0, 0, col = "black")
-	lines(investment, combined2, type="o", lty=1, pch=0)
-	lines(investment, combined3, type="o", lty=1, pch=16)
-	lines(investment, combined5, type="o", lty=1, pch=17)
-	lines(investment, combined0, type="o", lty=1, pch=18)
-	#lines(investment, outS1, type="l", lty=1)
-	legend("top", c("z2=0","z2=1", "z2=3.7", "z2=5", "z2=10"), lty=c(1,1,1,1,1), pch=c(18,15,0,16,17), horiz=TRUE, bty="n", cex=0.65)
+	lines(investment, combined0, type="o", lty=1, pch=0)
+	lines(investment, combined05, type="o", lty=1, pch=1)
+	lines(investment, combined2, type="o", lty=1, pch=3)
+	lines(investment, combined3, type="o", lty=1, pch=4)
+	lines(investment, combined5, type="o", lty=1, pch=5)
+	legend("top", c("z2=0", "z2=0.5", "z2=1", "z2=2", "z2=3.7", "z2=5"), lty=c(1,1,1,1,1,1), pch=c(0,1,2,3,4,5), horiz=TRUE, bty="n", cex=0.65)
 }
+
+
+### S3 followed by S1
+S3HS2 <- function(){
+	investment = seq(0, 5, by=0.2)
+	startingVul = 1.0
+	phi = 0.07637
+	gamma = 4.36077
+	alpha2 = 2.5
+	loss = 10
+
+	### S3 followed by S2
+	outS3H = S3H(investment, startingVul, phi, gamma)
+	combined0 = ((outS3H) - S2(0, outS3H, alpha2))*loss-(investment)
+	combined05 = ((outS3H) - S2(0.5, outS3H, alpha2))*loss-(investment+0.5)
+	combined1 = ((outS3H) - S2(1, outS3H, alpha2))*loss-(investment+1)
+	combined2 = ((outS3H) - S2(2, outS3H, alpha2))*loss-(investment+2)
+	combined3 = ((outS3H) - S2(3.7, outS3H, alpha2))*loss-(investment+3.7)
+	combined5 = ((outS3H) - S2(5, outS3H, alpha2))*loss-(investment+5)
+	plot(investment, combined1, type="o", ylim=range(-11,5), lty=1, pch=2, ylab="ENBIS (S3H, S2)", xlab="SSE Investment (z1)")
+	abline(0, 0, col = "black")
+	lines(investment, combined0, type="o", lty=1, pch=0)
+	lines(investment, combined05, type="o", lty=1, pch=1)
+	lines(investment, combined2, type="o", lty=1, pch=3)
+	lines(investment, combined3, type="o", lty=1, pch=4)
+	lines(investment, combined5, type="o", lty=1, pch=5)
+	legend("top", c("z2=0", "z2=0.5", "z2=1", "z2=2", "z2=3.7", "z2=5"), lty=c(1,1,1,1,1,1), pch=c(0,1,2,3,4,5), horiz=TRUE, bty="n", cex=0.65)	
+}
+
+
+
+
+
+
 
 
 S1S2VaryAlpha2 <- function(){
