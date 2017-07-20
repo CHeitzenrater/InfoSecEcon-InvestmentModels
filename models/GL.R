@@ -17,8 +17,9 @@
 # beta: control parameter.  In [GLZ16], beta increases as 
 #
 S1 <- function( z=1, v=1, alpha=1, beta=1 ){
-	return( v/((alpha*z) + 1)^beta )
+	return( v/(((alpha*z) + 1)^beta) )
 }
+
 S1_Var <- function( z=1, v=1, form ){
 	if( form == "GLZ16-LOW" ){
 		alpha = 1;
