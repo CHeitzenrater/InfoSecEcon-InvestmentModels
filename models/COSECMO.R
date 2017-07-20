@@ -1,7 +1,9 @@
-# Implementation of the COSECMO models, based off: 
-# Colbert, E. and Boehm, B.  "Cost Estimation for Secure Software & Systems", ISPA/SCEA 2008 Joint International Conference, 2008
-
-# This code can be used to generate the data in the COSECMO_Data.R file. 
+##
+## Implementation of the COSECMO models, based off: 
+## Colbert, E. and Boehm, B.  "Cost Estimation for Secure Software & Systems", 
+##   ISPA/SCEA 2008 Joint International Conference, 2008
+## This code can be used to generate the data in the COSECMO_Data.R file. 
+##
 
 ###
 ###
@@ -36,11 +38,6 @@ E <- function( B=0.91, val_ScaleFactors=1 ){
 Cost <- function( val_Effort, val_LaborRate ){
 	return( val_Effort * val_LaborRate ) 
 }
-
-
-
-
-
 
 
 
@@ -106,7 +103,7 @@ CalculateCostIntAssure <- function( effortEC, effort3, SECU=2.5, EAL, laborRate 
 	return( Cost( eff_ia, laborRate )  )
 }
 
-CalculateCostIntAssure_PM <- function( effortEC, effort3, SECU=2.5, EAL ){
+CalculateEffIntAssure <- function( effortEC, effort3, SECU=2.5, EAL ){
 	eff_ia = EffortIntAssure( effortEC, EffortPercentAL( effort3, SECU, EAL) ) 
 	return( eff_ia )
 }
