@@ -1,3 +1,9 @@
+##
+## This code was provided by Rainer Böhme, Feb 2016.
+## Used with permission. Inclusion in this repository by permission 
+##   of the author (email to C. Heitzenrater, 27 April 2017)
+##
+
 ################################################################
 #
 #	ORIGINAL IWL CODE

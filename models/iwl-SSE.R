@@ -1,4 +1,8 @@
-source("./models/iwl-Alt.R",local=TRUE)
+##
+## This code leverages code provided by Rainer Böhme, Feb 2016.
+## See file "iwl-Alt.R" for information on permission.
+##
+source("./iwl-Alt.R",local=TRUE)
 
 ################################################################
 #
@@ -157,7 +161,7 @@ CalculateOverallCosts <- function( revIter=0, testIter=0, revEff=1, testEff=1, r
 	# calculate gradient of attack, beased on per-phase effectiveness & number of iterations
 	deltaX <- setGradientOfAttack( revEff=revEff, testEff=testEff, revIter=revIter, testIter=testIter )
 
-	dynamicVals <- dynamic.revenue(n=25,a=1000,z=.025,r=.05,rho=.1,dx=deltaX,x0=15,sigma=uncert,lambda=0,cp=costs )
+	dynamicVals <- dynamic.revenue(n=25,a=1000,z=.025,r=.05,rho=.1,dx=deltaX,x0,sigma=uncert,lambda=0,cp=costs )
 	#staticVals <- static.revenue(n=25,a=1000,z=.025,r=.05,rho=.1,dx=deltaX,x0=15,sigma=uncert,cp=costs)
 	
 	#v <- as.numeric(dynamicVals$rev[dynamicVals$k+1])
