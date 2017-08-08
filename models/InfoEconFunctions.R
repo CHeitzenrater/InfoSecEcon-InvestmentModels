@@ -1,5 +1,6 @@
 ################################################################################
 ## Based on the r-into.R file 09/20/2012 Tyler Moore
+##  http://tylermoore.ens.utulsa.edu/courses/econsec/ 
 ##
 ## Basic security metrics functions
 ##
