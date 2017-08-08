@@ -8,7 +8,7 @@
 ##
 ################################################################################
 
-## Dependant files
+## Dependent files
 source("./GL.R")
 
 ## TODO --- error conditions
