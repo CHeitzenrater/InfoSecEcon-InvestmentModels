@@ -1,13 +1,16 @@
-##
+################################################################################
+## 
+## Version of the IWL code augmented for use in the IWL-SSE model.
+## 
 ## This code was provided by Rainer Böhme, Feb 2016.
-## Used with permission. Inclusion in this repository by permission 
-##   of the author (email to C. Heitzenrater, 27 April 2017)
+## Used with permission. Inclusion in this repository by permission of the 
+##  author (email to C. Heitzenrater, 27 April 2017)
 ##
+################################################################################
+
 
 ################################################################
-#
-#	ORIGINAL IWL CODE
-#
+#	ORIGINAL IWL CODE --- presented as supplied
 ################################################################
 
 # --------------- Static analysis ---------------  
@@ -55,25 +58,32 @@ def.cost <- function(k,rho=.1){
 }
 
 ################################################################
-#
 #	UPDATES TO IWL CODE
-#
 ################################################################
 
-# --------------- Dynamic analysis ---------------  
-# CDH --- added cp as an argument; added the reduction by cp to the outcome
+####
+## Dynamic analysis code
+## Added cp (cost of software process) as an argument; added the reduction by 
+##  cp to the outcome (CDH, Feb 2016)
+##
 dyn.outcome <- function(tatt,tmax,k1,rho=.1,a=1000,z=.025,r=.05,lambda=0, cp=0){
 	a*lambda+tatt*a*(r-z-lambda) + (tmax-tatt)*(a*r-def.cost(k1+tatt,rho=rho)) - sum(def.cost(k1:(k1+tatt),rho=rho))-cp
 }
 
-# CDH --- added cp as an argument
+
+####
+## Added cp as an argument (CDH, Feb 2016)
+##
 dyn.expected.outcome <- function(k1=0,tmax=25,a=1000,r=.05,z=.025,rho=.1,x0=15,dx=1,sigma=1,n=25,lambda=0,cp=0){
 	p <- prob.tatt(n=k1:n,x0=x0,dx=dx,sigma=sigma,a=a,z=z)
 	o <- sapply(as.numeric(names(p)),dyn.outcome,tmax=tmax,k1=k1,rho=rho,a=a,z=z,r=r,lambda=lambda,cp=cp)
 	sum(p*o)
 }
 
-# CDH --- added cp as an argument
+
+####
+## Added cp as an argument (CDH, Feb 2016)
+##
 dynamic.revenue <- function(tmax=25,a=1000,r=.05,z=.025,rho=.1,x0=15,dx=1,sigma=1,n=25,lambda=0,cp=0){
 	res.dyn <- sapply(0:n,dyn.expected.outcome,tmax=tmax,a=a,r=r,z=z,rho=rho,x0=x0,dx=dx,sigma=sigma,n=n,lambda=lambda,cp=cp)
 	res.stat <- static.revenue(n=n,a=a,z=z,r=r,rho=rho,dx=dx,x0=x0,sigma=sigma,cp=cp)$rev
@@ -83,6 +93,7 @@ dynamic.revenue <- function(tmax=25,a=1000,r=.05,z=.025,rho=.1,x0=15,dx=1,sigma=
 	which <- apply(cbind(res.stat,res.dyn/tmax),1,which.max)
 
 	return(list(rev=res,k=which.max(res)-1,which=which)) 
+	
 	### DEBUG
 	#message("res=",res," k=",k=which.max(res)-1," which=",which=which)
 }
