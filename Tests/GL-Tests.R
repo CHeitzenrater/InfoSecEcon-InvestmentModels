@@ -1,55 +1,164 @@
-####################################################################################################
+################################################################################
 #
-# Examining various aspects of the GL model
+# TODO:   Examining various aspects of the GL-SSE model
 #
 ########################
 
+## Required source files
 source("./models/GL.R")
 source("./models/GL-Hausken.R")
 
-
-S1S2_ROSI <- function(){
-	investment = seq(0, 5, by=0.2)
-	startingVul = 1.0
-	alpha = 0.3837
-	beta = 1.0
-	alpha2 = 2.5
-	delta = 0.1
-	loss = 10
-
-	# outS1 = S1(investment, startingVul, alpha, beta)
-	# #message(outS1)
-	# for( i in 1:length(outS1) ){
-		# #message(c("i=",i, " S1[i]=", outS1[i]))
-		# outS1[i] = outS1[i] + delta
-		# if(outS1[i] > 1){outS1[i]=1} 
-		# #message(c("new S1[i]=", outS1[i]))
-	# }
-	# combined0 = ((outS1) - S2(0, outS1, alpha2))*loss-(investment)
-	# combined05 = ((outS1) - S2(0.5, outS1, alpha2))*loss-(investment+0.5)
-	# combined1 = ((outS1) - S2(1, outS1, alpha2))*loss-(investment+1)
-	# combined2 = ((outS1) - S2(2, outS1, alpha2))*loss-(investment+2)
-	# combined3 = ((outS1) - S2(3.7, outS1, alpha2))*loss-(investment+3.7)
-	# combined5 = ((outS1) - S2(5, outS1, alpha2))*loss-(investment+5)
-	# #combined5 = ((outS1) - S2(10, outS1, alpha2))*loss-(investment+10)
+####
+## 
+##
+## Execution for Figure XX of [1]:
+##    out <- S1S2_ROSI(1000, 1, 1, 0.3837, 2.5, 0.1, seq(0, 250, by=5), 
+## 		c(0,10,25,50,100,250,370,500), c(-2, 50) )
+##
+##	  S1S2_ROSI(1000, 1, 1, 0.3837, 2.5, 0.1, seq(150, 750, by=20), 
+##    c(10,25,50,100,250,370,500), c(-2, 4) )
+##
+S1S2_ROSI <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv, yrng){
+	z1 		= preInv
+	z2		= postInv
+	v		= vuln
+	alpha 	= a1
+	beta	= b
+	alpha2 	= a2
+	delta 	= d
+	L 		= loss
+	t 		= 1
 	
-	# #sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1
-	combined0 = GL_SSE_S1_S2(startingVul,investment,0,1,loss,delta,alpha,beta,alpha2) / (investment)
-	combined05 = GL_SSE_S1_S2(startingVul,investment,0.5,1,loss,delta,alpha,beta,alpha2) / (investment+0.5)
-	combined1 = GL_SSE_S1_S2(startingVul,investment,1,1,loss,delta,alpha,beta,alpha2) / (investment+1)
-	combined2 = GL_SSE_S1_S2(startingVul,investment,2,1,loss,delta,alpha,beta,alpha2) / (investment+2)
-	combined3 = GL_SSE_S1_S2(startingVul,investment,3.7,1,loss,delta,alpha,beta,alpha2) / (investment+3.7)
-	combined5 = GL_SSE_S1_S2(startingVul,investment,5,1,loss,delta,alpha,beta,alpha2) / (investment+5)
+	#rosi <- vector(mode="numeric", length=0)
+	rosi <- matrix( ncol=length(z1), nrow=length(z2) )
 	
-	plot(investment, combined1, type="o", ylim=range(-2,3), lty=1, pch=2, ylab="ROSI", xlab="SSE Investment (z1)")
-	abline(0, 0, col = "black")
-	lines(investment, combined0, type="o", lty=1, pch=0)
-	lines(investment, combined05, type="o", lty=1, pch=1)
-	lines(investment, combined2, type="o", lty=1, pch=3)
-	lines(investment, combined3, type="o", lty=1, pch=4)
-	lines(investment, combined5, type="o", lty=1, pch=5)
-	legend("top", c("z2=0", "z2=0.5", "z2=1", "z2=2", "z2=3.7", "z2=5"), lty=c(1,1,1,1,1,1), pch=c(0,1,2,3,4,5), horiz=TRUE, bty="n", cex=0.65)
+	for(j in 1:length(z2) ){
+		for(i in 1:length(z1) ){
+			rosi[j,i] = GL_SSE_S1_S2(v,z1[i],z2[j],t,L,delta,alpha,beta,alpha2) / (z1[i]+z2[j])
+			#message(c("z1=", z1[i], " z2=", z2[j], " rosi=", rosi[j,i]))
+		}
+	}
+
+	plot(z1, rosi[1,], type="o", lty=1, pch=1, ylab=expression(paste("ROSI(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
+ 	abline(0, 0, col = "black")  
+ 	legV = bquote(z[2]==.(z2[1]))
+ 	ltyV = 1
+ 	pchV = 1
+	
+	for(k in 2:length(z2) ){
+		lines(z1, rosi[k,], type="o", lty=1, pch=k)
+		legV = c(legV, bquote(z[2]==.(z2[k])) )
+		ltyV = c(ltyV, 1)
+		pchV = c(pchV, k)
+	}
+
+	legend("top", legend=as.expression(legV), lty=ltyV, pch=pchV, horiz=TRUE, bty="n", cex=0.65)
+	
+	which(rosi == max(rosi), arr.ind = TRUE)
+
+	return(rosi)
 }
+
+####
+## 
+##
+## Execution for Figure XX of [1]:
+##    out <- S1S2_ENBIS(1000, 1, 1, 0.3837, 2.5, 0.1, seq(0, 600, by=20), 
+##      c(0,10,25,50,100,250,370,500), c(-450, 900) )
+## 
+S1S2_ENBIS <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv, yrng){
+	z1 		= preInv
+	z2		= postInv
+	v		= vuln
+	alpha 	= a1
+	beta		= b
+	alpha2 	= a2
+	delta 	= d
+	L 		= loss
+	t 		= 1
+	
+	enbis <- matrix( ncol=length(z1), nrow=length(z2) )
+	
+	for(j in 1:length(z2) ){
+		for(i in 1:length(z1) ){
+			enbis[j,i] = GL_SSE_S1_S2(v,z1[i],z2[j],t,L,delta,alpha,beta,alpha2)
+		}
+	}
+
+	plot(z1, enbis[1,], type="o", lty=1, pch=1, ylab=expression(paste("ENBIS(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
+ 	abline(0, 0, col = "black")  
+ 	legV = bquote(z[2]==.(z2[1]))
+ 	ltyV = 1
+ 	pchV = 1
+	
+	for(k in 2:length(z2) ){
+		lines(z1, enbis[k,], type="o", lty=1, pch=k)
+		legV = c(legV, bquote(z[2]==.(z2[k])) )
+		ltyV = c(ltyV, 1)
+		pchV = c(pchV, k)
+	}
+
+	legend("top", legend=as.expression(legV), lty=ltyV, pch=pchV, horiz=TRUE, bty="n", cex=0.65)
+	
+	## DEBUG
+	#which(enbis == max(enbis), arr.ind = TRUE)
+	
+	return(enbis)
+}
+
+
+
+# S1S2_ENBIS <- function(){
+	# investment = seq(0, 5, by=0.2)
+	# startingVul = 1.0
+	# alpha = 0.3837
+	# beta = 1.0
+	# alpha2 = 2.5
+	# delta = 0.1
+	# loss = 10
+
+	# # outS1 = S1(investment, startingVul, alpha, beta)
+	# # #message(outS1)
+	# # for( i in 1:length(outS1) ){
+		# # #message(c("i=",i, " S1[i]=", outS1[i]))
+		# # outS1[i] = outS1[i] + delta
+		# # if(outS1[i] > 1){outS1[i]=1} 
+		# # #message(c("new S1[i]=", outS1[i]))
+	# # }
+	# # combined0 = ((outS1) - S2(0, outS1, alpha2))*loss-(investment)
+	# # combined05 = ((outS1) - S2(0.5, outS1, alpha2))*loss-(investment+0.5)
+	# # combined1 = ((outS1) - S2(1, outS1, alpha2))*loss-(investment+1)
+	# # combined2 = ((outS1) - S2(2, outS1, alpha2))*loss-(investment+2)
+	# # combined3 = ((outS1) - S2(3.7, outS1, alpha2))*loss-(investment+3.7)
+	# # combined5 = ((outS1) - S2(5, outS1, alpha2))*loss-(investment+5)
+	# # #combined5 = ((outS1) - S2(10, outS1, alpha2))*loss-(investment+10)
+	
+	# # #sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1
+	# combined0 = GL_SSE_S1_S2_ENBIS(startingVul,investment,0,1,loss,delta,alpha,beta,alpha2)	
+	# combined05 = GL_SSE_S1_S2_ENBIS(startingVul,investment,0.5,1,loss,delta,alpha,beta,alpha2)
+	# combined1 = GL_SSE_S1_S2_ENBIS(startingVul,investment,1,1,loss,delta,alpha,beta,alpha2)
+	# combined2 = GL_SSE_S1_S2_ENBIS(startingVul,investment,2,1,loss,delta,alpha,beta,alpha2)
+	# combined3 = GL_SSE_S1_S2_ENBIS(startingVul,investment,3.7,1,loss,delta,alpha,beta,alpha2)
+	# combined5 = GL_SSE_S1_S2_ENBIS(startingVul,investment,5,1,loss,delta,alpha,beta,alpha2)
+	
+	# plot(investment, combined1, type="o", ylim=range(-7,5), lty=1, pch=2, ylab="ENBIS(z1, z2)", xlab="SSE Investment (z1)")
+	# abline(0, 0, col = "black")
+	# lines(investment, combined0, type="o", lty=1, pch=0)
+	# lines(investment, combined05, type="o", lty=1, pch=1)
+	# lines(investment, combined2, type="o", lty=1, pch=3)
+	# lines(investment, combined3, type="o", lty=1, pch=4)
+	# lines(investment, combined5, type="o", lty=1, pch=5)
+	# legend("top", c("z2=0", "z2=0.5", "z2=1", "z2=2", "z2=3.7", "z2=5"), lty=c(1,1,1,1,1,1), pch=c(0,1,2,3,4,5), horiz=TRUE, bty="n", cex=0.65)
+# }
+
+
+
+
+
+
+
+
+
 
 
 ### S3 followed by S2
