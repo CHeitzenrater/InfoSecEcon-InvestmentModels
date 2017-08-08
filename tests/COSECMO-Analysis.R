@@ -204,7 +204,8 @@ lines(COSECMO_1MLOC, s5W_best_v, type="b", lty=3, pch=13)
 legend("bottomright",
        c("COSECMO 1M LOC","S1","S1-beta","S2","S3H","S4H","S6H","S6H-z","3W","3W-z","5W","5W-z"), 
        lty=c(1,2,3,2,2,2,2,3,2,3,2,3),
-       pch=c(0,19,19,18,17,16,15,15,14,14,13,13))
+       pch=c(0,19,19,18,17,16,15,15,14,14,13,13),
+	   y.intersp=1.3 )
        
 #S2-z is not showing up because it is so far off the others
 
@@ -305,7 +306,7 @@ s1_best_beta_eff_dev 	= S1_resid(EffAssuredDev_1M, 1, 0.3837, 1)
 s3H_best_eff_dev 		= S3H_resid(EffAssuredDev_1M,1, 0.07637, 4.36077) 
 
 
-plot(EffAssuredDev_1M, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
+plot(EffAssuredDev_1M, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
 lines(EffAssuredDev_1M, s1_best_beta_eff_dev, 	type="b", lty=1, pch=1)
 lines(EffAssuredDev_1M, s3H_best_eff_dev, 	 	type="b", lty=1, pch=2)
 
@@ -322,7 +323,8 @@ legend(	"bottomright",
 		c(	"COSECMO-Requirements", "S1-Requirements", "S3H-Requirements", "COSECMO-Design", "S1-Design", 
 			"S3H-Design", "COSECMO-Implementation", "S1-Implementation", "S3H-Implementation"), 
 		lty=c(2,2,2,3,3,3,1,1,1),
-		pch=c(0,1,2,0,1,2,0,1,2))
+		pch=c(0,1,2,0,1,2,0,1,2),
+		y.intersp=1.3 )
 
 #######################
 ## 5K plot
@@ -345,7 +347,7 @@ s3H_best_eff_dev_5k 		= S3H_resid(EffAssuredDev_5K,1, 1.1987, 0.1811)
 #s3H_best_eff_dev_5k 		= S3H_resid(EffAssuredDev_5K,1, 0.07637, 4.36077) 
 
 		
-plot(EffAssuredDevel_5K, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
+plot(EffAssuredDev_5K, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
 lines(EffAssuredDev_5K, s1_best_beta_eff_dev_5k, 	type="b", lty=1, pch=1)
 lines(EffAssuredDev_5K, s3H_best_eff_dev_5k, 		type="b", lty=1, pch=2)
 
@@ -361,7 +363,8 @@ legend(	"bottomright",
 		c(	"COSECMO-Requirements", "S1-Requirements", "S3H-Requirements", "COSECMO-Design", "S1-Design", 
 			"S3H-Design", "COSECMO-Implementation", "S1-Implementation", "S3H-Implementation"), 
 		lty=c(2,2,2,3,3,3,1,1,1),
-		pch=c(0,1,2,0,1,2,0,1,2))
+		pch=c(0,1,2,0,1,2,0,1,2),
+		y.intersp=1.3 )
 		
 		
 		
@@ -381,21 +384,21 @@ s1_best_beta_eff_1M 	= S1_resid(EffAssured_1M, 1, 0.3837, 1)
 s3H_best_eff_1M 		= S3H_resid(EffAssured_1M,1, 0.07637, 4.36077)
 
 
-plot(EffAssured_1M, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
+plot(EffAssured_1M, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=1, pch=0 )
 lines(EffAssured_1M, s1_best_beta_eff_1M, 	type="b", lty=1, pch=1)
 lines(EffAssured_1M, s3H_best_eff_1M, 		type="b", lty=1, pch=2)
 
-plot(EffAssured_100K, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=3, pch=0 )
+#plot(EffAssured_100K, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=3, pch=0 )
 lines(EffAssured_100K, eal_alt, 				type="b", lty=3, pch=0)
 lines(EffAssured_100K, s1_best_beta_eff_100K, 	type="b", lty=3, pch=1)
 lines(EffAssured_100K, s3H_best_eff_100K, 		type="b", lty=3, pch=2)
 
-plot(EffAssured_20K, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=2, pch=0 )
+#plot(EffAssured_20K, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=2, pch=0 )
 lines(EffAssured_20K, eal_alt, 				type="b", lty=2, pch=0)
 lines(EffAssured_20K, s1_best_beta_eff_20K, 	type="b", lty=2, pch=1)
 lines(EffAssured_20K, s3H_best_eff_20K, 		type="b", lty=2, pch=2)
 
-plot(EffAssured_5K, eal_alt, type="b", xlab="Man Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=4, pch=0 )
+#plot(EffAssured_5K, eal_alt, type="b", xlab="Person-Months / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), lty=4, pch=0 )
 lines(EffAssured_5K, eal_alt, 				type="b", lty=4, pch=0)
 lines(EffAssured_5K, s1_best_beta_eff_5K, 	type="b", lty=4, pch=1)
 lines(EffAssured_5K, s3H_best_eff_5K, 		type="b", lty=4, pch=2)
@@ -406,7 +409,8 @@ legend(	"bottomright",
 			"COSECMO-100K", 	"S1-100K", 	"S3H-100K",
 			"COSECMO-1M", 	"S1-1M", 	"S3H-1M" ),
 		lty=c(4,4,4,2,2,2,3,3,3,1,1,1),
-		pch=c(0,1,2,0,1,2,0,1,2,0,1,2))
+		pch=c(0,1,2,0,1,2,0,1,2,0,1,2),
+		y.intersp=1.3 )
 
 	
 		
@@ -470,7 +474,7 @@ FPClassificationTime = 0.1
 coverityFP = 0.15
 coverityEffect_h = 0.45  
 #coverityFPRatio = 3950
-coverityFoundVuln = vulns * coverityEffect
+coverityFoundVuln = vulns * coverityEffect_h
 coverityCostKLOC_h = ( 
 	(0.09 * size) + 											#coverity license costs
 	(coverityFoundVuln * remediationTime * developerCostHourHigh) +  		#fix costs
@@ -652,7 +656,7 @@ s3H_best_cost_dev 		= S3H_resid(EffAssuredDev_20K,1, 0.3395, 1.0031)
 CostAssuredDev_20K = EffAssuredDev_20K * developerCostMonth
 CostAssuredDev_5K = EffAssuredDev_5K * developerCostMonth
 
-plot(CostAssuredDev_20K, eal_alt, type="b", xlab="Cost / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), xlim=range(0:220000), lty=1, pch=0 )
+plot(CostAssuredDev_20K, eal_alt, type="b", xlab="Cost / KLOC", ylab="Vulnerability Reduction [(1-S(z,v)]", ylim=range(0:1), xlim=range(0:190000), lty=1, pch=0 )
 #lines(CostAssuredDev_5K, eal_alt, type="b", lty=2, pch=0)
 #xlim=range(0:10000)
 
@@ -696,7 +700,8 @@ segments(costsSEL4[1],effectsSEL4[1],costsSEL4[2],effectsSEL4[2])
  legend("bottomright",
        c("COSECMO EAL", "S1", "S3H", "SEL4 Data", "Static Analysis Data"), 
        lty=c(1,1,1,0,0),
-       pch=c(0,1,2,15,19))
+       pch=c(0,1,2,15,19),
+	   y.intersp=1.3 )
 
 
 
