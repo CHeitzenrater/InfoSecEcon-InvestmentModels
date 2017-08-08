@@ -1,18 +1,23 @@
 ################################################################################
-#
-# Implementation of the Gordon & Loeb Secure Software Engineering (GL-SSE) model
-# 
-# In support of the paper: C. Heitzenrater & A. Simpson, "Modelling Software 
-#   Security Investment", submitted to ICSE 2018
-#
+##
+## Gordon & Loeb Secure Software Engineering (GL-SSE) model
+## 
+## In support of the paper: C. Heitzenrater & A. Simpson, "Modelling Software 
+##   Security Investment", planned for submission to ICSE 2018 (under PA review)
+##
 ################################################################################
 
-## Required source files
+## Dependent source files
 source("./GL.R")
 source("./GL-Hausken.R")
+source("./GL-Willemson.R")
+
+################################################################################
+## ENBIS function
+################################################################################
 
 ####
-## Implement the GL-SSE ENBIS Function
+## Implements the GL-SSE ENBIS Function
 ##
 ## sVul:	Starting vulnerability; default=1
 ## z1:		SwSec (pre-deployment) investment  						
@@ -52,9 +57,7 @@ GL_SSE <- function(sVul=1,z1,z2,t=1,lambda,delta=0,SPRE,SPOST,prePar,postPar){
 
 
 ################################################################################
-#
-# Shortcut functions for specific combinations of $S_{pre}$ and $S_{post}$
-#
+## Specific combinations of $S_{pre}$ and $S_{post}$
 ################################################################################
 
 ####
@@ -105,7 +108,6 @@ GL_SSE_S1_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2
 ## alpha2:	Value for $\alpha$ in $S_{post}=S^{II}$; default=1
 ##
 GL_SSE_S3H_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha2=1){
-	
 	start = sVul-delta			# Set starting vulnerability
 	
 	## Pre-deployment vulnerability reduction provided by z1 under 
@@ -125,35 +127,51 @@ GL_SSE_S3H_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha2=1
 }
 
 
-
-
-
 ####
-## Implement the GL-SSE ENBIS Function
-##
+## Earned Net Benefit (ENBIS) for GL-SSE with $S_{pre} = S^{IIIH}$ and 
+##  $S_{post} = S^{I}$
+## sVul:	Starting vulnerability; default=1
+## z1:		SwSec (pre-deployment) investment  						
+## z2:		Post-deployment investment
+## t:		Threat; default=1
+## lambda:	Loss													
+## delta:	Component of vulnerability for configuration issues; default=0.1
+## phi:		Value for $\phi$ in $S_{pre}=S^{IIIH}$; default=1
+## gamma:	Value for $\gamma$ in $S_{pre}=S^{IIIH}$; default=1
+## alpha:	Value for $\alpha$ in $S_{pst}=S^{I}$; default=1
+## beta:	Value for $\beta$ in $S_{pst}=S^{I}$; default=1
 ##
 GL_SSE_S3H_S1 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha=1,beta=1){
-	start = sVul-delta
+	start = sVul-delta     # Set starting vulnerability
+	
 	pre = start - S3H(z1, start, phi, gamma) + delta
-	#if(pre > 1){pre <- 1}
-	#message(pre)
 	
 	post = pre - S1(z2, pre, alpha, beta) 
-	#message(post)
 		
 	return( post * (t*lambda) - (z1 + z2) );	
 }
 
 
-############################################
+################################################################################
+## HELPER FUNCTIONS
+################################################################################
+
+####
 ## 
-## Helper function for thesis/analysis
 ## Returns the arrays of vulnerability values
 ## Order: Vpre, Vpst, S1 output, S2 output
-#
+## sVul:	Starting vulnerability; default=1
+## z1:		SwSec (pre-deployment) investment  						
+## z2:		Post-deployment investment
+## t:		Threat; default=1
+## lambda:	Loss													
+## delta:	Component of vulnerability for configuration issues; default=0.1
+## alpha1:	Value for $\alpha$ in $S_{pre}=S^{I}$; default=1
+## beta:	Value for $\beta$ in $S_{pre}=S^{I}$; default=1
+## alpha2:	Value for $\alpha$ in $S_{post}=S^{II}$; default=1
+##
 GL_SSE_S1_S2_retVs <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1){
-	
-	start = sVul-delta
+	start = sVul-delta   # Set starting vulnerability
 	
 	firstZ = S1(z1, start, alpha1, beta1)
 	pre = start - firstZ + delta
