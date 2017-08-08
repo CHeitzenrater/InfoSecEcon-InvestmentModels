@@ -11,6 +11,9 @@
 ## Dependant files
 source("./GL.R")
 
+## TODO --- error conditions
+## TODO --- fix the if..else conditions
+
 ################################################################################
 ## Hausken Security Breach Probability Functions
 ################################################################################
@@ -31,8 +34,8 @@ S3H <- function( z=1, v=1, phi=1, gamma=1 ){
 ## Hausken security breach probability function S4H; from [1]
 ## z:     Investment in cybersecurity
 ## v:     Vulnerability
-## mu:    S3H parameter (productivity?)
-## k:     S3H parameter (productivity?)
+## mu:    S4H parameter (productivity?)
+## k:     S4H parameter (productivity?)
 ## 
 S4H <- function( z=1, v=1, mu=1, k=0.5 ){
 	# and 0 < k < 1
@@ -48,8 +51,8 @@ S4H <- function( z=1, v=1, mu=1, k=0.5 ){
 ## Hausken security breach probability function S5H; from [1]
 ## z:     Investment in cybersecurity
 ## v:     Vulnerability
-## omega: S3H parameter (productivity?)
-## k:     S3H parameter (productivity?)
+## omega: S5H parameter (productivity?)
+## k:     S5H parameter (productivity?)
 ## 
 S5H <- function( z=1, v=1, omega=1, k=2 ){
 	# k > 1
@@ -65,8 +68,8 @@ S5H <- function( z=1, v=1, omega=1, k=2 ){
 ## Hausken security breach probability function S6H; from [1]
 ## z:     Investment in cybersecurity
 ## v:     Vulnerability
-## omega: S3H parameter (productivity?)
-## k:     S3H parameter (productivity?)
+## omega: S6H parameter (productivity?)
+## k:     S6H parameter (productivity?)
 ## 
 S6H <- function( z=1, v=1, lambda=0.1 ){
 	if( z > (1/lambda) ){
@@ -164,7 +167,8 @@ HauskenGraph_ENBIS <- function(){
 	  sapply(investment, S6H, startingVul, lambda)) * loss - investment
 	  
 	## Produce graph
-	plot(investment, outS1, type="o", ylim=range(-3.5,2.5), lty=1, pch=15, ylab="S(z,v)", xlab="Investment")
+	plot(investment, outS1, type="o", ylim=range(-3.5,2.5), lty=1, pch=15, 
+	  ylab="S(z,v)", xlab="Investment")
 	#abline(0, 0, col = "black")
 
 	lines(investment, outS2, type="o", lty=1, pch=8)
@@ -173,6 +177,7 @@ HauskenGraph_ENBIS <- function(){
 	lines(investment, outS5, type="o", lty=1, pch=0)
 	lines(investment, outS6, type="o", lty=1, pch=10)
 	
-	legend("top", c("S1", "S2", "S3", "S4", "S5", "S6"), lty=c(1,1,1,1,1,1), pch=c(15,8,17,18,0,10), horiz=TRUE, bty="n", cex=0.65)
+	legend("top", c("S1", "S2", "S3", "S4", "S5", "S6"), lty=c(1,1,1,1,1,1), 
+	  pch=c(15,8,17,18,0,10), horiz=TRUE, bty="n", cex=0.65)
 
 }
