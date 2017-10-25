@@ -8,15 +8,18 @@
 source("./models/GL.R")
 source("./models/GL-Hausken.R")
 
+## out <- GL_SSE_S1_S2(1,b,1,1,100,0.1,0.5,1,1)
+## b <- seq(1:100)
+## Should alpha be divided by the magnitude of the loss?
+
 ####
 ## 
 ##
 ## Execution for Figure XX of [1]:
-##    out <- S1S2_ROSI(1000, 1, 1, 0.3837, 2.5, 0.1, seq(0, 250, by=5), 
-## 		c(0,10,25,50,100,250,370,500), c(-2, 50) )
+##    out <- S1S2_ROSI(1000, 0.99, 1, 0.3837, 2.5, 0.1, seq(0, 150, by=5), 
+## 		c(0,10,25,50,100,250,370,500), c(-2, 125) )
 ##
-##	  S1S2_ROSI(1000, 1, 1, 0.3837, 2.5, 0.1, seq(150, 750, by=20), 
-##    c(10,25,50,100,250,370,500), c(-2, 4) )
+##	  values do get to be negative at some point
 ##
 S1S2_ROSI <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv, yrng){
 	z1 		= preInv
@@ -36,17 +39,18 @@ S1S2_ROSI <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv
 		for(i in 1:length(z1) ){
 			rosi[j,i] = GL_SSE_S1_S2(v,z1[i],z2[j],t,L,delta,alpha,beta,alpha2) / (z1[i]+z2[j])
 			#message(c("z1=", z1[i], " z2=", z2[j], " rosi=", rosi[j,i]))
+			if(is.nan(rosi[j,i])) rosi[j,i] <- 0
 		}
 	}
 
-	plot(z1, rosi[1,], type="o", lty=1, pch=1, ylab=expression(paste("ROSI(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
+	plot(z1, rosi[1,], type="o", lty=1, cex=0.5, pch=1, ylab=expression(paste("ROSI(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
  	abline(0, 0, col = "black")  
  	legV = bquote(z[2]==.(z2[1]))
  	ltyV = 1
  	pchV = 1
 	
 	for(k in 2:length(z2) ){
-		lines(z1, rosi[k,], type="o", lty=1, pch=k)
+		lines(z1, rosi[k,], type="o", lty=1, cex=0.5, pch=k)
 		legV = c(legV, bquote(z[2]==.(z2[k])) )
 		ltyV = c(ltyV, 1)
 		pchV = c(pchV, k)
@@ -63,15 +67,15 @@ S1S2_ROSI <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv
 ## 
 ##
 ## Execution for Figure XX of [1]:
-##    out <- S1S2_ENBIS(1000, 1, 1, 0.3837, 2.5, 0.1, seq(0, 600, by=20), 
-##      c(0,10,25,50,100,250,370,500), c(-450, 900) )
+##    out <- S1S2_ENBIS(1000, 0.99, 1, 0.3837, 2.5, 0.1, seq(0, 800, by=20), 
+##      c(0,10,25,50,100,250,370,500), c(-100, 1050) )
 ## 
 S1S2_ENBIS <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv, yrng){
 	z1 		= preInv
 	z2		= postInv
 	v		= vuln
 	alpha 	= a1
-	beta		= b
+	beta	= b
 	alpha2 	= a2
 	delta 	= d
 	L 		= loss
@@ -82,17 +86,18 @@ S1S2_ENBIS <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postIn
 	for(j in 1:length(z2) ){
 		for(i in 1:length(z1) ){
 			enbis[j,i] = GL_SSE_S1_S2(v,z1[i],z2[j],t,L,delta,alpha,beta,alpha2)
+			if(is.nan(enbis[j,i])) enbis[j,i] <- 0
 		}
 	}
 
-	plot(z1, enbis[1,], type="o", lty=1, pch=1, ylab=expression(paste("ENBIS(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
+	plot(z1, enbis[1,], type="o", lty=1, cex=0.5, pch=1, ylab=expression(paste("ENBIS(", z[1], "+", z[2], ")")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
  	abline(0, 0, col = "black")  
  	legV = bquote(z[2]==.(z2[1]))
  	ltyV = 1
  	pchV = 1
 	
 	for(k in 2:length(z2) ){
-		lines(z1, enbis[k,], type="o", lty=1, pch=k)
+		lines(z1, enbis[k,], type="o", lty=1, cex=0.5, pch=k)
 		legV = c(legV, bquote(z[2]==.(z2[k])) )
 		ltyV = c(ltyV, 1)
 		pchV = c(pchV, k)
@@ -106,6 +111,57 @@ S1S2_ENBIS <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postIn
 	return(enbis)
 }
 
+
+####
+## 
+##
+## Execution for Figure XX of [1]:
+##    out <- S1S2_ROSSP(1000, 1, 1, 0.3837, 2.5, 0.1, seq(0, 600, by=5), 
+##      c(10,25,50,100,250,370,500), c(-5, 70) )
+##    out <- S1S2_ROSSP(1000, 0.99, 1, 0.3837, 2.5, 0.1, seq(0, 100, by=2), 
+##      c(0,10,25,50,100,250,370,500), c(-20, 70) )
+## 
+S1S2_ROSSP <- function(loss=10, vuln=1, b=1, a1=0.5, a2=1, d=0.1, preInv, postInv, yrng){
+	z1 		= preInv
+	z2		= postInv
+	v		= vuln
+	alpha 	= a1
+	beta		= b
+	alpha2 	= a2
+	delta 	= d
+	L 		= loss
+	t 		= 1
+	
+	rossp <- matrix( ncol=length(z1), nrow=length(z2) )
+	
+	for(j in 1:length(z2) ){
+		for(i in 1:length(z1) ){
+			rossp[j,i] = ( ( GL_SSE_S1_S2(v,z1[i],z2[j],t,L,delta,alpha,beta,alpha2) / (z1[i]+z2[j]) )- 
+			               ( GL_SSE_S1_S2(v,0,z2[j],t,L,delta,alpha,beta,alpha2) / z2[j] ) )
+		 	if(is.nan(rossp[j,i])) rossp[j,i] <- 0
+		}
+	}
+
+	plot(z1, rossp[1,], type="o", lty=1, pch=1, cex=0.5, ylab=expression(paste("ROSSP")), xlab=expression(paste("SSE Investment (", z[1], ")") ), ylim=yrng )
+ 	abline(0, 0, col = "black")  
+ 	legV = bquote(z[2]==.(z2[1]))
+ 	ltyV = 1
+ 	pchV = 1
+	
+	for(k in 2:length(z2) ){
+		lines(z1, rossp[k,], type="o", lty=1, cex=0.5, pch=k)
+		legV = c(legV, bquote(z[2]==.(z2[k])) )
+		ltyV = c(ltyV, 1)
+		pchV = c(pchV, k)
+	}
+
+	legend("top", legend=as.expression(legV), lty=ltyV, pch=pchV, horiz=TRUE, bty="n", cex=0.65)
+	
+	## DEBUG
+	#which(rossp == max(rossp), arr.ind = TRUE)
+	
+	return(rossp)
+}
 
 
 # S1S2_ENBIS <- function(){

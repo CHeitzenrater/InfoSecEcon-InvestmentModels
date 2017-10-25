@@ -9,7 +9,7 @@
 ################################################################################
 
 ## Required source files
-source("./models/iwl-SSE.R", local=TRUE)
+#source("./models/iwl-SSE.R", local=TRUE)
 
 ################################################################################
 ##
@@ -112,11 +112,11 @@ Figure6 <- function( sigmaMax=16, x0=15 ){
 	## Mark the four points on the graph by number (corresponding to the 
 	##  notional uncertainty-gradient graph) in the previous section of 
 	##  the paper
-	text(4,13,labels=c("4"),cex=1.5) 
+	text(4.45,15,labels=c("4"),cex=2.5) 
 	#expression(paste("4: Defined By Initial ",Delta,"x"))))
-	text(1.25,15,labels=c("1"),cex=1.5)
-	text(1.25,1.1,labels=c("2"),cex=1.5)
-	text(4.45,1.1,labels=c("3"),cex=1.5)			
+	text(1.25,15,labels=c("1"),cex=2.5)
+	text(1.25,1.1,labels=c("2"),cex=2.5)
+	text(4.45,1.1,labels=c("3"),cex=2.5)			
 		
 	## Set up the legend for the graph
 	par(mar=c(0, 0, 0, 0))

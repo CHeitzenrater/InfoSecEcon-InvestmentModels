@@ -32,12 +32,13 @@ source("./GL-Willemson.R")
 ##
 GL_SSE <- function(sVul=1,z1,z2,t=1,lambda,delta=0,SPRE,SPOST,prePar,postPar){
 	
-	start 	= sVul-delta		# Set starting vulnerability
+	v_pre 	= sVul-delta		# Set starting vulnerability
+	
 	
 	## Calculate the pre-deployment vulnerability reduction using the supplied 
 	##  security breach probability function SPRE and parameters prePar
 	## TODO: this needs to be generalised properly
-	pre 	= 	start - do.call( SPRE, list(z1, start, 
+	v_dep 	= 	v_pre - do.call( SPRE, list(z1, v_pre, 
 				as.numeric(as.character(prePar[1])), 
 				as.numeric(as.character(prePar[2]))) ) + delta
 	## DEBUG
@@ -46,13 +47,13 @@ GL_SSE <- function(sVul=1,z1,z2,t=1,lambda,delta=0,SPRE,SPOST,prePar,postPar){
 	## Calculate the post-deployment vulnerability reduction using the supplied 
 	##  security breach probability function SPOST and parameters postPar
 	## TODO: this needs to be generalised properly	
-	post = 	pre - do.call( SPOST, list(z2, pre, 
+	v_pst = pre - do.call( SPOST, list(z2, v_dep, 
 			as.numeric(as.character(postPar[1]))) )
 	## DEBUG
 	# message(post)
 	
 	## Return ENBIS value: Vulnerability * Threat * Loss - Investment 
-	return( post * (t*lambda) - (z1 + z2) );	
+	return( v_pst * (t*lambda) - (z1 + z2) );	
 }
 
 
@@ -75,22 +76,26 @@ GL_SSE <- function(sVul=1,z1,z2,t=1,lambda,delta=0,SPRE,SPOST,prePar,postPar){
 ##
 GL_SSE_S1_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1){
 	
-	start = sVul-delta		# Set starting vulnerability
+	v_pre = sVul-delta		# Set starting vulnerability
 	
 	## Pre-deployment vulnerability reduction provided by z1 under 
 	##  $S_{pre} = S^{I}$ 
-	pre = start - S1(z1, start, alpha1, beta1) + delta
+	#v_dep = (v_pre - S1(z1, v_pre, alpha1, beta1)) + delta
+	v_dep = S1(z1, v_pre, alpha1, beta1) + delta
+	
 	## DEBUG
-	# message(pre)
+	# message(v_dep)
 	
 	## Post-deployment vulnerability reduction provided by z2 under 
 	##  $S_{post} = S^{II}$ 	
-	post = pre - S2(z2, pre, alpha2) 
+	#v_pst = v_dep - S2(z2, v_dep, alpha2) 
+	v_pst = S2(z2, v_dep, alpha2) 
+	
 	## DEBUG
-	# message(post)
+	# message(v_pst)
 		
 	## Return ENBIS value: Vulnerability * Threat * Loss - Investment 	
-	return( post * (t*lambda) - (z1 + z2) );	
+	return( (sVul - v_pst) * (t*lambda) - (z1 + z2) );	
 }
 
 
@@ -108,23 +113,23 @@ GL_SSE_S1_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2
 ## alpha2:	Value for $\alpha$ in $S_{post}=S^{II}$; default=1
 ##
 GL_SSE_S3H_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha2=1){
-	start = sVul-delta			# Set starting vulnerability
+	v_pre = sVul-delta			# Set starting vulnerability
 	
 	## Pre-deployment vulnerability reduction provided by z1 under 
 	##  $S_{pre} = S^{IIIH}$ 
-	pre = start - S3H(z1, start, phi, gamma) + delta
+	v_dep = v_pre - S3H(z1, v_pre, phi, gamma) + delta
 	## DEBUG
-	# message(pre)
+	# message(v_dep)
 	
 	## Post-deployment vulnerability reduction provided by z2 under 
 	##  $S_{post} = S^{II}$ 	
-	post = pre - S2(z2, pre, alpha2) 
+	v_pst = v_dep - S2(z2, v_dep, alpha2) 
 	## DEBUG
-	# message(post)
+	# message(v_pst)
 	
 	## Return ENBIS value: Vulnerability * Threat * Loss - Investment 	
-	return( post * (t*lambda) - (z1 + z2) );	
-}
+	return( v_pst * (t*lambda) - (z1 + z2) );	
+} ### TODO - update
 
 
 ####
@@ -142,14 +147,14 @@ GL_SSE_S3H_S2 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha2=1
 ## beta:	Value for $\beta$ in $S_{pst}=S^{I}$; default=1
 ##
 GL_SSE_S3H_S1 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha=1,beta=1){
-	start = sVul-delta     # Set starting vulnerability
+	v_pre = sVul-delta     # Set starting vulnerability
 	
-	pre = start - S3H(z1, start, phi, gamma) + delta
+	v_dep = v_pre - S3H(z1, v_pre, phi, gamma) + delta
 	
-	post = pre - S1(z2, pre, alpha, beta) 
+	v_pst = v_dep - S1(z2, v_dep, alpha, beta) 
 		
-	return( post * (t*lambda) - (z1 + z2) );	
-}
+	return( v_pst * (t*lambda) - (z1 + z2) );	
+} ## TODO -- update
 
 
 ################################################################################
@@ -171,14 +176,15 @@ GL_SSE_S3H_S1 <- function(sVul=1,z1,z2,t=1,lambda,delta=0,phi=1,gamma=1,alpha=1,
 ## alpha2:	Value for $\alpha$ in $S_{post}=S^{II}$; default=1
 ##
 GL_SSE_S1_S2_retVs <- function(sVul=1,z1,z2,t=1,lambda,delta=0,alpha1=1,beta1=1,alpha2=1){
-	start = sVul-delta   # Set starting vulnerability
+	v_pre = sVul - delta   # Set starting vulnerability
 	
-	firstZ = S1(z1, start, alpha1, beta1)
-	pre = start - firstZ + delta
+	firstS = S1(z1, v_pre, alpha1, beta1)
+	#v_dep = (v_pre - firstS) + delta
+	v_dep = firstS + delta
 
-	secondZ = S2(z2, pre, alpha2)
-	post = pre - secondZ	
+	secondS = S2(z2, v_dep, alpha2)
+	v_pst = sVul - secondS    #v_dep - secondS	
 
-	return( list(v1=pre,v2=post,v3=firstZ,v4=secondZ) );	
+	return( list(v1=v_dep,v2=v_pst,v3=firstS,v4=secondS) );	
 }
 
