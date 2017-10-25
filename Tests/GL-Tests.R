@@ -1,6 +1,6 @@
 ################################################################################
 #
-# TODO:   Examining various aspects of the GL-SSE model
+# TODO:   Examining various aspects of the GL-SSE model.  Needs to be integrated
 #
 ########################
 
